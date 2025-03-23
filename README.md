@@ -114,7 +114,6 @@ python example_clustering.py --clustering_method hierarchical --n_clusters 10
 
 ## Implementation Notes
 
-- **Updated Link Prediction**: The implementation uses PyTorch Geometric's `RandomLinkSplit` transform instead of the deprecated `train_test_split_edges` function.
 - **Dynamic Graph Construction**: The project builds document graphs using citation relationships from the CORA dataset.
 - **GNN Models**: All models (GCN, GAT, GraphSAGE) are implemented using PyTorch Geometric's neural network modules.
 - **Evaluation Metrics**: 
