@@ -1,0 +1,74 @@
+{
+    "data": {
+        "data_dir": "./data",
+        "datasets": ["cora", "citeseer", "pubmed"],
+        "default_dataset": "cora",
+        "val_ratio": 0.05,
+        "test_ratio": 0.1,
+        "neg_sampling_ratio": 1.0
+    },
+    "models": {
+        "gcn": {
+            "hidden_dim": 64,
+            "embedding_dim": 32,
+            "num_layers": 2,
+            "dropout": 0.5
+        },
+        "gat": {
+            "hidden_dim": 64,
+            "embedding_dim": 32,
+            "num_layers": 2,
+            "heads": 8,
+            "output_heads": 1,
+            "dropout": 0.5
+        },
+        "sage": {
+            "hidden_dim": 64,
+            "embedding_dim": 32,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "aggregator": "mean"
+        }
+    },
+    "training": {
+        "lr": 0.01,
+        "weight_decay": 5e-4,
+        "epochs": 200,
+        "patience": 20,
+        "log_interval": 10,
+        "seed": 42,
+        "device": "auto"
+    },
+    "clustering": {
+        "n_clusters": null,
+        "methods": ["kmeans", "hierarchical"],
+        "default_method": "kmeans",
+        "similarity_threshold": 0.7,
+        "community_methods": ["louvain", "label_prop", "greedy"],
+        "default_community_method": "louvain"
+    },
+    "experiments": {
+        "classification": {
+            "enabled": true,
+            "metrics": ["accuracy", "precision", "recall", "f1"],
+            "save_model": true
+        },
+        "link_prediction": {
+            "enabled": true,
+            "metrics": ["auc", "precision", "recall", "f1"],
+            "save_model": true
+        },
+        "clustering": {
+            "enabled": true,
+            "metrics": ["nmi", "ari"],
+            "visualize": true
+        }
+    },
+    "results": {
+        "results_dir": "./results",
+        "save_embeddings": true,
+        "visualize_graph": true,
+        "visualize_clusters": true,
+        "visualize_training": true
+    }
+}
