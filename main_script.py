@@ -66,6 +66,8 @@ def parse_args():
     parser.add_argument('--weight_decay', type=float, default=5e-4, help='Weight decay')
     parser.add_argument('--epochs', type=int, default=200, help='Number of epochs')
     parser.add_argument('--patience', type=int, default=20, help='Early stopping patience')
+    parser.add_argument('--dataset', type=str, default='cora', choices=['cora', 'arxiv'],
+                        help='Dataset to use')
     
     # Task settings
     parser.add_argument('--tasks', nargs='+', default=['classification', 'link_prediction', 'clustering'],
@@ -102,7 +104,12 @@ def main():
     # Load and preprocess data
     print("\n1. Loading and preprocessing data...")
     preprocessor = DataPreprocessor(data_dir=args.data_dir)
-    data, num_classes = preprocessor.load_cora()
+    if args.dataset == 'cora':
+        data, num_classes = preprocessor.load_cora()
+    elif args.dataset == 'arxiv':
+        data, num_classes = preprocessor.load_arxiv()
+    else:
+        raise ValueError(f"Unknown dataset: {args.dataset}")
     
     # Create link prediction split if needed
     edge_split = None

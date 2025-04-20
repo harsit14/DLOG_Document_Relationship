@@ -117,6 +117,10 @@ class NodeClassificationTrainer:
         
         # Forward pass
         out = self.model(data.x, data.edge_index)
+        print(out.shape)
+        print(data.y.shape)
+        print(data.train_mask.shape)
+        print(out[data.train_mask].shape, data.y[data.train_mask].shape)
         loss = F.cross_entropy(out[data.train_mask], data.y[data.train_mask])
         
         # Backward pass

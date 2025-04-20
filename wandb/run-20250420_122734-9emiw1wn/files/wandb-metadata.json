@@ -1,0 +1,88 @@
+{
+  "os": "Linux-5.14.0-427.42.1.el9_4.x86_64-x86_64-with-glibc2.34",
+  "python": "CPython 3.10.16",
+  "startedAt": "2025-04-20T16:27:34.864307Z",
+  "args": [
+    "--model",
+    "gcn",
+    "--epochs",
+    "100",
+    "--hidden_dim",
+    "256"
+  ],
+  "program": "/compute/babel-4-25/jianmenl/mengzeyuan64/DLOG_Document_Relationship/arxiv_main.py",
+  "codePath": "arxiv_main.py",
+  "git": {
+    "remote": "git@github.com:harsit14/DLOG_Document_Relationship.git",
+    "commit": "1d71d0732af446ac6fee1a71eb63f3f72c103d6e"
+  },
+  "email": "mengzeyuan64@gmail.com",
+  "root": "/compute/babel-4-25/jianmenl/mengzeyuan64/DLOG_Document_Relationship",
+  "host": "babel-12-29",
+  "executable": "/data/user_data/jianmenl/miniconda3/envs/cs584/bin/python",
+  "codePathLocal": "arxiv_main.py",
+  "cpu_count": 32,
+  "cpu_count_logical": 64,
+  "gpu": "NVIDIA L40S",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "2158065074176",
+      "used": "1672748953600"
+    }
+  },
+  "memory": {
+    "total": "1081293672448"
+  },
+  "cpu": {
+    "count": 32,
+    "countLogical": 64
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA L40S",
+      "memoryTotal": "48305799168",
+      "cudaCores": 18176,
+      "architecture": "Ada"
+    }
+  ],
+  "slurm": {
+    "cluster_name": "babel",
+    "conf": "/var/spool/slurmd/conf-cache/slurm.conf",
+    "cpus_on_node": "8",
+    "cpus_per_task": "8",
+    "gpus_on_node": "1",
+    "gtids": "0",
+    "job_account": "kfragki2",
+    "job_cpus_per_node": "8",
+    "job_end_time": "1745339242",
+    "job_gid": "2709624",
+    "job_gpus": "5",
+    "job_id": "4602192",
+    "job_name": "train_doc_gnn",
+    "job_nodelist": "babel-12-29",
+    "job_num_nodes": "1",
+    "job_partition": "general",
+    "job_qos": "normal",
+    "job_start_time": "1745166442",
+    "job_uid": "2709624",
+    "job_user": "jianmenl",
+    "jobid": "4602192",
+    "localid": "0",
+    "mem_per_node": "131072",
+    "nnodes": "1",
+    "nodeid": "0",
+    "nodelist": "babel-12-29",
+    "prio_process": "0",
+    "procid": "0",
+    "script_context": "prolog_task",
+    "submit_dir": "/compute/babel-4-25/jianmenl/mengzeyuan64/DLOG_Document_Relationship",
+    "submit_host": "babel-10-13",
+    "task_pid": "3261357",
+    "tasks_per_node": "1",
+    "topology_addr": "babel-12-29",
+    "topology_addr_pattern": "node",
+    "tres_per_task": "cpu=8"
+  },
+  "cudaVersion": "12.6"
+}

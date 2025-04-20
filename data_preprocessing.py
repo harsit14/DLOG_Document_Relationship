@@ -7,8 +7,18 @@ from torch_geometric.transforms import NormalizeFeatures
 import torch_geometric.utils as utils
 import networkx as nx
 import matplotlib.pyplot as plt
+from ogb.nodeproppred import PygNodePropPredDataset
 from sklearn.manifold import TSNE
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
+from torch_geometric.data import Data
+from torch_geometric.data.storage import GlobalStorage
+from torch_geometric.data.data import DataEdgeAttr, DataTensorAttr
+
+class CustomPygNodePropPredDataset(PygNodePropPredDataset):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Override loading with weights_only=False and safe globals
+        self.data, self.slices = torch.load(self.processed_paths[0], weights_only=False)
 
 class DataPreprocessor:
     def __init__(self, data_dir='./data'):
@@ -30,6 +40,7 @@ class DataPreprocessor:
         dataset = Planetoid(root=self.data_dir, name='Cora', transform=NormalizeFeatures())
         data = dataset[0]
         
+        
         print(f"CORA dataset statistics:")
         print(f"  Number of nodes: {data.num_nodes}")
         print(f"  Number of edges: {data.num_edges}")
@@ -40,6 +51,53 @@ class DataPreprocessor:
         print(f"  Number of test nodes: {data.test_mask.sum().item()}")
         
         return data, dataset.num_classes
+
+    def load_arxiv(self):
+        """
+        Load the Arxiv dataset using OGB (Open Graph Benchmark).
+        Returns:
+            torch_geometric.data.Data: Arxiv dataset
+        """
+        print("Loading Arxiv dataset...")
+        torch.serialization.add_safe_globals([GlobalStorage, DataEdgeAttr, DataTensorAttr])
+
+        # Add safe globals for torch_geometric
+        torch.serialization.add_safe_globals([DataEdgeAttr])
+        dataset = CustomPygNodePropPredDataset(name="ogbn-arxiv", root=self.data_dir)
+        data = dataset[0]
+        
+        # Normalize node features
+        data.x = torch.nn.functional.normalize(data.x, p=1, dim=1)
+
+        # Create train/val/test masks based on chronological split
+        # Arxiv typically uses: 90% train, 5% val, 5% test
+        num_nodes = data.num_nodes
+        train_size = int(0.9 * num_nodes)
+        val_size = int(0.05 * num_nodes)
+        
+        # Create masks
+        data.train_mask = torch.zeros(num_nodes, dtype=torch.bool)
+        data.val_mask = torch.zeros(num_nodes, dtype=torch.bool)
+        data.test_mask = torch.zeros(num_nodes, dtype=torch.bool)
+        
+        # Assign masks based on chronological order
+        data.train_mask[:train_size] = True
+        data.val_mask[train_size:train_size + val_size] = True
+        data.test_mask[train_size + val_size:] = True
+        
+        print(f"Arxiv dataset statistics:")
+        print(f"  Number of nodes: {data.num_nodes}")
+        print(f"  Number of edges: {data.num_edges}")
+        print(f"  Number of node features: {data.num_node_features}")
+        print(f"  Number of classes: {dataset.num_classes}")
+        print(f"  Number of training nodes: {data.train_mask.sum().item()}")
+        print(f"  Number of validation nodes: {data.val_mask.sum().item()}")
+        print(f"  Number of test nodes: {data.test_mask.sum().item()}")
+        
+        
+        return data, dataset.num_classes
+
+    
     
     def create_link_prediction_split(self, data, val_ratio=0.05, test_ratio=0.1, neg_sampling_ratio=1.0):
         """
