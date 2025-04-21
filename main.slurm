@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=train_doc_gnn
-#SBATCH --output=./results/train_doc_gnn_%j.out
-#SBATCH --error=./results/train_doc_gnn_%j.err
+#SBATCH --output=./results/train_doc_gat_%j.out
+#SBATCH --error=./results/train_doc_gat_%j.err
 #SBATCH --time=2-00:00:00
 #SBATCH --partition=general
 #SBATCH --gres=gpu:L40S:1
@@ -23,12 +23,16 @@ source ~/.bashrc
 conda activate cs584
 
 # Train GCN model
-python arxiv_main.py --model gcn --epochs 100 --hidden_dim 256
+# python arxiv_main.py --model gcn --epochs 100 --hidden_dim 256
+# accelerate launch --config_file accelerate_config/single_gpu.yaml arxiv_main.py --model gcn --epochs 100 --hidden_dim 256 
+# CUDA_VISIBLE_DEVICES=0,1 python arxiv_main.py --model gcn --epochs 100 --hidden_dim 256 
+# python arxiv_main.py --model gcn --epochs 100 --hidden_dim 256 --batch_size 128 --run_name gcn
+
 
 # # Train GAT model with specific parameters
-# python arxiv_main.py --model gat --epochs 200 --hidden_dim 512 --heads 8
+# python arxiv_main.py --model gat --epochs 200 --hidden_dim 512 --heads 8 --run_name gat
 
 # # Train GIN model with custom configuration
-# python arxiv_main.py --model gin --epochs 150 --hidden_dim 384 --num_layers 4
+python arxiv_main.py --model sage --epochs 200 --hidden_dim 384 --num_layers 4 --run_name sage --batch_size 32
 
 
